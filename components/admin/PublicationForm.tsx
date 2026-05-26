@@ -27,10 +27,14 @@ export function PublicationForm({ slug, sha, initialData }: Props) {
   }
 
   function buildMarkdown() {
-    return `---\ntitle: "${fields.title}"\njournal: "${fields.journal}"\nyear: ${fields.year}\ndoi: ${fields.doi}\npdf_url: ${fields.pdf_url}\n---\n${fields.content}`
+    return `---\ntitle: "${fields.title}"\njournal: "${fields.journal}"\nyear: ${fields.year}\ndoi: "${fields.doi}"\npdf_url: "${fields.pdf_url}"\n---\n${fields.content}`
   }
 
   async function handleSave() {
+    if (!fields.title.trim()) {
+      setStatus('error')
+      return
+    }
     setStatus('saving')
     const finalSlug = slug ?? slugify(fields.title)
     const res = await fetch('/api/content', {
@@ -66,7 +70,7 @@ export function PublicationForm({ slug, sha, initialData }: Props) {
         </div>
         <div>
           <label htmlFor="pub-year" className="block text-xs font-medium text-gray-500 mb-1">Year</label>
-          <input id="pub-year" value={fields.year} onChange={e => set('year', e.target.value)} placeholder="2024"
+          <input id="pub-year" type="number" value={fields.year} onChange={e => set('year', e.target.value)} placeholder="2024"
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
       </div>
