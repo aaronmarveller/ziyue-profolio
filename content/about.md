@@ -1,5 +1,5 @@
 ---
-name: Ziyue Liu
+name: Ziyue Guo
 title: AI UX Researcher
 tagline: Bridging language, cognition, and human-AI interaction
 email: your@email.com

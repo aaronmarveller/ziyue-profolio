@@ -6,8 +6,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Ziyue Liu — AI UX Researcher',
-  description: 'Portfolio of Ziyue Liu, AI UX Researcher with a Ph.D in Applied Linguistics.',
+  title: 'Ziyue Guo — AI UX Researcher',
+  description: 'Portfolio of Ziyue Guo, AI UX Researcher with a Ph.D in Applied Linguistics.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

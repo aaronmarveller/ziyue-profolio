@@ -13,7 +13,7 @@ export function Nav() {
     <header className="border-b border-gray-100">
       <nav className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="text-sm font-semibold text-gray-900 tracking-tight">
-          Ziyue Liu
+          Ziyue Guo
         </Link>
         <ul className="flex gap-6">
           {links.map(({ href, label }) => (

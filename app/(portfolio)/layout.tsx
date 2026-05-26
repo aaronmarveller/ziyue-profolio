@@ -8,7 +8,7 @@ export default function PortfolioLayout({ children }: { children: React.ReactNod
       <main>{children}</main>
       <footer className="border-t border-gray-100 mt-24">
         <div className="max-w-5xl mx-auto px-6 py-8 text-sm text-gray-400">
-          © {new Date().getFullYear()} Ziyue Liu
+          © {new Date().getFullYear()} Ziyue Guo
         </div>
       </footer>
     </div>

@@ -2,7 +2,7 @@
 import { getAbout } from '@/lib/content'
 import { ContactForm } from '@/components/portfolio/ContactForm'
 
-export const metadata = { title: 'Contact — Ziyue Liu' }
+export const metadata = { title: 'Contact — Ziyue Guo' }
 
 export default async function ContactPage() {
   const about = await getAbout()

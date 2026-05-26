@@ -587,32 +587,19 @@ export default function PortfolioLayout({ children }: { children: React.ReactNod
 }
 ```
 
-- [ ] **Step 3: Update tailwind.config.ts to use Inter font**
+- [ ] **Step 3: Configure Tailwind v4 theme (Inter font)**
 
-Replace the default `tailwind.config.ts` content with:
+The project uses Tailwind v4 which does not use `tailwind.config.ts` for theme customization. Delete `tailwind.config.ts` if it exists. Add theme variables to `app/globals.css`:
 
-```typescript
-import type { Config } from 'tailwindcss'
+```css
+@import "tailwindcss";
 
-const config: Config = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-      },
-      colors: {
-        accent: '#4F46E5',
-      },
-    },
-  },
+@theme {
+  --font-family-sans: Inter, ui-sans-serif, system-ui;
 }
-export default config
 ```
+
+Inter font loading is handled via `next/font` in `app/layout.tsx` (next step) — Tailwind's sans variable is just a fallback for prose and other elements.
 
 - [ ] **Step 4: Add Inter font to app/layout.tsx**
 

@@ -1,7 +1,7 @@
 // app/(portfolio)/publications/page.tsx
 import { getPublications } from '@/lib/content'
 
-export const metadata = { title: 'Publications — Ziyue Liu' }
+export const metadata = { title: 'Publications — Ziyue Guo' }
 
 export default async function PublicationsPage() {
   const publications = await getPublications()

@@ -2,7 +2,7 @@
 import { getProjects } from '@/lib/content'
 import { ProjectCard } from '@/components/portfolio/ProjectCard'
 
-export const metadata = { title: 'Research — Ziyue Liu' }
+export const metadata = { title: 'Research — Ziyue Guo' }
 
 export default async function ProjectsPage() {
   const projects = await getProjects()
