@@ -1,6 +1,7 @@
 'use client'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function ContentEditor({ filePath, initialContent, sha, label }: Props) {
+  const router = useRouter()
   const [content, setContent] = useState(initialContent)
   const [currentSha, setCurrentSha] = useState(sha)
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
@@ -24,8 +26,11 @@ export function ContentEditor({ filePath, initialContent, sha, label }: Props) {
       body: JSON.stringify({ filePath, content, sha: currentSha }),
     })
     if (res.ok) {
+      const data = await res.json()
+      if (data.sha) setCurrentSha(data.sha)
       setStatus('saved')
-      setTimeout(() => window.location.reload(), 1500)
+      router.refresh()
+      setTimeout(() => setStatus('idle'), 2000)
     } else {
       setStatus('error')
     }

@@ -21,9 +21,14 @@ export async function POST(req: NextRequest) {
   if (!filePath || !content) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
+
+  const ALLOWED_PATH = /^content\/(about|skills|projects\/[a-zA-Z0-9_-]+|publications\/[a-zA-Z0-9_-]+)\.md$/
+  if (!ALLOWED_PATH.test(filePath)) {
+    return NextResponse.json({ error: 'Invalid file path' }, { status: 400 })
+  }
   // sha is empty string for new files — commitFile handles that correctly
 
-  await commitFile(filePath, content, sha ?? '', message ?? `content: update ${filePath}`)
+  const newSha = await commitFile(filePath, content, sha ?? '', message ?? `content: update ${filePath}`)
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ ok: true, sha: newSha })
 }

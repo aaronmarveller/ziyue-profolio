@@ -28,7 +28,7 @@ export async function commitFile(
   content: string,
   sha: string,   // empty string '' for new files, existing SHA for updates
   message: string
-): Promise<void> {
+): Promise<string> {
   const body: Record<string, unknown> = {
     message,
     content: Buffer.from(content).toString('base64'),
@@ -41,6 +41,8 @@ export async function commitFile(
     body: JSON.stringify(body),
   })
   if (!res.ok) throw new Error(`GitHub commit error: ${res.status}`)
+  const data = await res.json()
+  return data.content?.sha ?? data.commit?.sha ?? ''
 }
 
 export async function listFiles(dirPath: string): Promise<string[]> {
