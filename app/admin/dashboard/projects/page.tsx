@@ -5,8 +5,9 @@ import matter from 'gray-matter'
 
 export default async function AdminProjectsPage() {
   const files = await listFiles('content/projects')
+  const mdFiles = files.filter(f => f.endsWith('.md'))
   const projects = await Promise.all(
-    files.map(async f => {
+    mdFiles.map(async f => {
       const slug = f.replace('.md', '')
       const { content } = await readFile(`content/projects/${f}`)
       const { data } = matter(content)
