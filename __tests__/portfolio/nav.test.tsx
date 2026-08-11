@@ -103,6 +103,23 @@ describe('MobileMenu (small-screen disclosure)', () => {
     expect(screen.getByRole('link', { name: 'Publications' })).toHaveAttribute('aria-current', 'page')
   })
 
+  it('keeps focus on the toggle when opening, then lets Tab reach every menu link in order', async () => {
+    const user = userEvent.setup()
+    render(<MobileMenu links={links} currentPath="/" />)
+    const toggle = screen.getByRole('button', { name: 'Open menu' })
+    await user.click(toggle)
+
+    // ARIA disclosure pattern: focus stays on the toggle when opening.
+    expect(toggle).toHaveFocus()
+
+    await user.tab()
+    expect(screen.getByRole('link', { name: 'Research' })).toHaveFocus()
+    await user.tab()
+    expect(screen.getByRole('link', { name: 'Publications' })).toHaveFocus()
+    await user.tab()
+    expect(screen.getByRole('link', { name: 'Contact' })).toHaveFocus()
+  })
+
   it('closes with Escape and returns focus to the toggle button', async () => {
     const user = userEvent.setup()
     render(<MobileMenu links={links} currentPath="/" />)

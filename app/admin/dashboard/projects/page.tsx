@@ -3,6 +3,11 @@ import { listFiles, readFile } from '@/lib/github'
 import Link from 'next/link'
 import matter from 'gray-matter'
 
+// This page fetches live GitHub content per request via lib/github.ts.
+// Static prerender at build was accidental and required a real GITHUB_TOKEN;
+// render per request instead (behavior is otherwise unchanged).
+export const dynamic = 'force-dynamic'
+
 export default async function AdminProjectsPage() {
   const files = await listFiles('content/projects')
   const mdFiles = files.filter(f => f.endsWith('.md'))

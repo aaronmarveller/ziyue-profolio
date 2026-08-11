@@ -3,7 +3,14 @@ import { getProjects, getProject, getPublications, getAbout, getSkills } from '@
 
 jest.mock('fs/promises')
 import * as fs from 'fs/promises'
+
 const mockFs = fs as jest.Mocked<typeof fs>
+// jest's mocked readdir typing resolves to the withFileTypes:true overload
+// (Dirent<NonSharedBuffer>[]), but content.ts calls readdir() without options
+// and treats the result as plain filenames. This alias is exactly the value
+// type jest expects for the mock, so the tests can provide plain string[]
+// filenames without an `any` cast (eslint forbids `as any`).
+type ReaddirMockValue = Parameters<typeof mockFs.readdir.mockResolvedValue>[0]
 
 const PROJECT_MD = `---
 title: Test Project
@@ -40,7 +47,9 @@ Some skills`
 describe('getProjects', () => {
   it('returns parsed projects sorted by date descending', async () => {
     const olderMd = PROJECT_MD.replace('2024-06', '2023-01').replace('Test Project', 'Older Project')
-    mockFs.readdir.mockResolvedValue(['test-project.md', 'older-project.md'] as any)
+    mockFs.readdir.mockResolvedValue(
+      ['test-project.md', 'older-project.md'] as unknown as ReaddirMockValue
+    )
     mockFs.readFile
       .mockResolvedValueOnce(PROJECT_MD)
       .mockResolvedValueOnce(olderMd)
@@ -72,7 +81,9 @@ describe('getProject', () => {
 describe('getPublications', () => {
   it('returns publications sorted by year descending', async () => {
     const older = PUB_MD.replace('2024', '2022')
-    mockFs.readdir.mockResolvedValue(['test-paper.md', 'older-paper.md'] as any)
+    mockFs.readdir.mockResolvedValue(
+      ['test-paper.md', 'older-paper.md'] as unknown as ReaddirMockValue
+    )
     mockFs.readFile.mockResolvedValueOnce(PUB_MD).mockResolvedValueOnce(older)
 
     const pubs = await getPublications()
