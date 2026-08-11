@@ -1,16 +1,20 @@
 // app/(portfolio)/layout.tsx
-import { Nav } from '@/components/portfolio/Nav'
+import { PortfolioNav } from '@/components/portfolio/Nav'
+import { Footer } from '@/components/portfolio/Footer'
 
+/**
+ * Public portfolio shell — the shared visual frame for every public route.
+ * Background/text are set here once; pages stay transparent and only
+ * consume the documented text/color tokens (see globals.css @theme).
+ */
 export default function PortfolioLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      <Nav />
-      <main>{children}</main>
-      <footer className="border-t border-gray-100 mt-24">
-        <div className="max-w-5xl mx-auto px-6 py-8 text-sm text-gray-400">
-          © {new Date().getFullYear()} Ziyue Guo
-        </div>
-      </footer>
+    <div className="flex min-h-screen flex-col bg-white text-gray-900 antialiased dark:bg-[#0b0f14] dark:text-gray-200">
+      {/* Floating translucent header; content scrolls beneath it. */}
+      <PortfolioNav />
+      {/* pt-16 reserves the 64px floating header height. */}
+      <main className="flex-1 pt-16">{children}</main>
+      <Footer />
     </div>
   )
 }

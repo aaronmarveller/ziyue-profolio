@@ -1,6 +1,183 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@theme {
-  --font-family-sans: Inter, ui-sans-serif, system-ui;
+/* ------------------------------------------------------------------ */
+/* DESIGN TOKENS                                                       */
+/*                                                                     */
+/* These tokens are the shared public contract. Every public page      */
+/* (home, research, publications, contact) consumes them.              */
+/*                                                                     */
+/* --font-sans   : platform system sans-serif stack (no web font).     */
+/* --color-accent-* : the single restrained blue accent family.        */
+/* Neutrals: built-in Tailwind `gray` family + `dark:` variants.       */
+/* `@theme static` emits every token into `:root` even before any      */
+/* utility uses it, so other pages may safely rely on these tokens.    */
+/* ------------------------------------------------------------------ */
+@theme static {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  /* Calm, desaturated steel blue — not a marketing blue, not indigo. */
+  --color-accent-50: #f4f7fb;
+  --color-accent-100: #e8eef7;
+  --color-accent-200: #d3dfee;
+  --color-accent-300: #b0c6de;
+  --color-accent-400: #83a4c8;
+  --color-accent-500: #6288af;
+  --color-accent-600: #4a6f96;
+  --color-accent-700: #3b5a7c;
+  --color-accent-800: #304a66;
+  --color-accent-900: #273c52;
+  --color-accent-950: #1a2a3b;
+}
+
+/* ------------------------------------------------------------------ */
+/* BASE                                                                */
+/* ------------------------------------------------------------------ */
+@layer base {
+  /* The page supports both color schemes; the browser may render      */
+  /* native form controls/scrollbars adaptively. The <meta> equivalent */
+  /* is emitted by the root layout's `viewport` export.                */
+  :root {
+    color-scheme: light dark;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #1f2937; /* gray-800 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Adaptive dark default for the document canvas. Opaque layout
+     wrappers (public shell, admin) paint over this. */
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #0b0f14;
+      color: #e5e7eb; /* gray-200 */
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* COMPONENT CLASSES (shared public primitives)                        */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* Fluid page container. Equivalent to `mx-auto max-w-5xl px-6`. */
+  .page-container {
+    width: 100%;
+    max-width: 64rem; /* 1024px */
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  /* ---- Public typography scale ---------------------------------
+     Size-specific tracking (negative on large display text) and
+     leading (tight on headings, comfortable on body). Fluid via
+     clamp() so layout scales with the user's text-size setting.  */
+  .display-1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    font-optical-sizing: auto;
+  }
+
+  .heading-1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    font-optical-sizing: auto;
+  }
+
+  .heading-2 {
+    font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+    font-optical-sizing: auto;
+  }
+
+  .body-lead {
+    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  /* ---- Translucent material -------------------------------------
+     The ONLY translucent surfaces in the public system: the floating
+     header and the small-screen menu. Content scrolls underneath.   */
+  .glass-surface {
+    background-color: rgb(255 255 255 / 0.72);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .glass-surface {
+      background-color: rgb(10 15 20 / 0.66);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* ADAPTIVE PREFERENCES                                               */
+/*                                                                     */
+/* These overrides are intentionally UNLAYERED so they beat Tailwind   */
+/* utilities (unlayered author CSS has higher priority than layered    */
+/* CSS at equal specificity).                                          */
+/* ------------------------------------------------------------------ */
+
+/* Reduced transparency: solidify translucent surfaces, drop the blur. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-surface {
+    background-color: #ffffff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) and (prefers-color-scheme: dark) {
+  .glass-surface {
+    background-color: #0b0f14;
+  }
+}
+
+/* Increased contrast: near-solid surfaces with a defined contrasting
+   boundary on the floating chrome. */
+@media (prefers-contrast: more) {
+  .glass-surface {
+    background-color: #ffffff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-color: #1f2937; /* gray-800 */
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  .glass-surface {
+    background-color: #0b0f14;
+    border-color: #d1d5db; /* gray-300 */
+  }
+}
+
+/* Reduced motion: neutralize spatial transitions. State changes become
+   short, near-instant opacity/static updates — no sliding or bouncing. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
 }
