@@ -20,17 +20,22 @@ function isCurrent(href: string, pathname: string): boolean {
 }
 
 const linkBase =
-  'inline-flex items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ' +
+  'nav-link inline-flex items-center rounded-md px-3 py-1.5 font-mono-ui text-[0.8125rem] uppercase tracking-[0.08em] transition-colors duration-150 ' +
   'active:bg-gray-900/5 dark:active:bg-white/10 ' +
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ' +
   'dark:focus-visible:ring-accent-400 focus-visible:ring-offset-2 ' +
   'focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900'
 
 const linkIdle =
-  'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+  'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
 
 const linkCurrent =
   'text-accent-700 bg-accent-500/10 dark:text-accent-300 dark:bg-accent-400/15'
+
+const brandRing =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ' +
+  'dark:focus-visible:ring-accent-400 focus-visible:ring-offset-2 ' +
+  'focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900'
 
 /**
  * Nav — the floating translucent public header.
@@ -45,11 +50,17 @@ export function Nav({ currentPath }: { currentPath: string }) {
     <header className="glass-surface fixed inset-x-0 top-0 z-40 border-b border-black/[0.06] dark:border-white/10">
       <div className="page-container">
         <div className="flex h-16 items-center justify-between">
+          {/* Serif wordmark with a pulsing "listening" dot (the site, like the
+              assistant in the hero, is always open to a conversation). */}
           <Link
             href="/"
             aria-current={currentPath === '/' ? 'page' : undefined}
-            className={`${linkBase} -mx-1 px-1 text-[15px] font-semibold tracking-tight text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300`}
+            className={`${brandRing} -mx-1 flex items-center gap-2 rounded-md px-1 font-display text-[17px] font-semibold tracking-tight text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300`}
           >
+            <span
+              aria-hidden="true"
+              className="rec-dot inline-block h-2.5 w-2.5 rounded-full bg-voice-500 dark:bg-voice-400"
+            />
             Ziyue Guo
           </Link>
 

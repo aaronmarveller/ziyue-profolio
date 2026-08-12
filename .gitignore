@@ -46,3 +46,8 @@ next-env.d.ts
 public/files/*.pdf
 .claude/
 .superpowers/
+
+# local tooling artifacts
+.cache/
+.codex-inspect/
+.zcode/

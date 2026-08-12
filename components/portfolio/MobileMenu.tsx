@@ -114,7 +114,7 @@ export function MobileMenu({
                     href={href}
                     aria-current={current ? 'page' : undefined}
                     onClick={closeAndReturnFocus}
-                    className={`flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors duration-150 active:bg-gray-900/5 dark:active:bg-white/10 ${focusRing} ${
+                    className={`flex items-center rounded-lg px-4 py-3 font-mono-ui text-[0.875rem] uppercase tracking-[0.08em] transition-colors duration-150 active:bg-gray-900/5 dark:active:bg-white/10 ${focusRing} ${
                       current
                         ? 'bg-accent-500/10 text-accent-700 dark:bg-accent-400/15 dark:text-accent-300'
                         : 'text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white'

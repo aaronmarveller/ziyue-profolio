@@ -6,7 +6,10 @@ const focusRing =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-accent-400 dark:focus-visible:ring-offset-gray-900'
 
 const inputClasses =
-  'w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 transition-colors hover:border-gray-300 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/60 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 dark:hover:border-gray-600 dark:focus:border-accent-400 dark:focus:ring-accent-400/60'
+  'w-full rounded-lg border border-black/[0.08] bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 transition-colors hover:border-gray-300 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/60 dark:border-white/15 dark:bg-[#0d1219] dark:text-gray-100 dark:placeholder:text-gray-500 dark:hover:border-gray-600 dark:focus:border-accent-400 dark:focus:ring-accent-400/60'
+
+const fieldLabel =
+  'label-mono mb-2 block text-gray-500 dark:text-gray-400'
 
 export function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
@@ -39,7 +42,7 @@ export function ContactForm() {
     return (
       <p
         role="status"
-        className="rounded-xl border border-green-200 bg-green-50 px-5 py-4 text-sm leading-relaxed text-green-800 dark:border-green-800 dark:bg-green-900/40 dark:text-green-200"
+        className="hero-reveal rounded-xl border border-green-200 bg-green-50 px-5 py-4 text-sm leading-relaxed text-green-800 dark:border-green-800 dark:bg-green-900/40 dark:text-green-200"
       >
         Message sent! I&apos;ll get back to you soon.
       </p>
@@ -51,7 +54,7 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label htmlFor="contact-name" className={fieldLabel}>
           Name
         </label>
         <input
@@ -64,7 +67,7 @@ export function ContactForm() {
         />
       </div>
       <div>
-        <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label htmlFor="contact-email" className={fieldLabel}>
           Email
         </label>
         <input
@@ -77,7 +80,7 @@ export function ContactForm() {
         />
       </div>
       <div>
-        <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label htmlFor="contact-message" className={fieldLabel}>
           Message
         </label>
         <textarea
@@ -102,9 +105,17 @@ export function ContactForm() {
         type="submit"
         disabled={sending}
         aria-busy={sending}
-        className={`inline-flex items-center justify-center rounded-lg bg-accent-600 px-5 py-2.5 text-sm font-medium text-white transition duration-150 hover:bg-accent-700 active:scale-[0.98] active:bg-accent-700 disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 dark:bg-accent-400 dark:text-gray-950 dark:hover:bg-accent-300 dark:active:bg-accent-300 ${focusRing}`}
+        className={`group inline-flex items-center justify-center rounded-full bg-accent-600 px-6 py-3 text-sm font-medium text-white transition duration-150 hover:bg-accent-700 active:scale-[0.98] active:bg-accent-700 disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 dark:bg-accent-400 dark:text-gray-950 dark:hover:bg-accent-300 dark:active:bg-accent-300 ${focusRing}`}
       >
         {sending ? 'Sending...' : 'Send Message'}
+        {!sending && (
+          <span
+            aria-hidden="true"
+            className="ml-2 inline-block transition-transform duration-200 group-hover:translate-x-0.5"
+          >
+            →
+          </span>
+        )}
       </button>
     </form>
   )

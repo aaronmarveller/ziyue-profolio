@@ -3,6 +3,7 @@ import { getProject, getProjects } from '@/lib/content'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { CSSProperties } from 'react'
 import type { Metadata } from 'next'
 
 // Shared focus-visible ring contract (see globals.css design tokens).
@@ -37,7 +38,8 @@ export default async function ProjectDetailPage({
     <div className="mx-auto max-w-3xl px-6 py-16 md:py-20">
       <Link
         href="/projects"
-        className={`inline-flex items-center gap-1.5 text-sm font-medium text-accent-600 transition-colors duration-150 hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300 ${FOCUS_RING}`}
+        className={`hero-reveal inline-flex items-center gap-1.5 font-mono-ui text-xs font-medium text-accent-600 transition-colors duration-150 hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300 ${FOCUS_RING}`}
+        style={{ '--reveal-delay': '0.05s' } as CSSProperties}
       >
         <svg
           aria-hidden="true"
@@ -55,13 +57,27 @@ export default async function ProjectDetailPage({
       </Link>
 
       <article className="mt-10">
-        <h1 className="heading-1 text-gray-900 dark:text-gray-100">{project.title}</h1>
-        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <p className="text-sm text-gray-500 dark:text-gray-400">{project.date}</p>
+        <p
+          className="hero-reveal label-mono text-accent-600 dark:text-accent-400"
+          style={{ '--reveal-delay': '0.12s' } as CSSProperties}
+        >
+          Case file
+        </p>
+        <h1
+          className="hero-reveal heading-1 mt-2 text-gray-900 dark:text-gray-100"
+          style={{ '--reveal-delay': '0.2s' } as CSSProperties}
+        >
+          {project.title}
+        </h1>
+        <div
+          className="hero-reveal mt-4 flex flex-wrap items-center gap-x-4 gap-y-2"
+          style={{ '--reveal-delay': '0.3s' } as CSSProperties}
+        >
+          <p className="font-mono-ui text-xs text-gray-500 dark:text-gray-400">{project.date}</p>
           <ul className="flex flex-wrap gap-2">
             {project.tags.map(tag => (
               <li key={tag}>
-                <span className="rounded-full bg-accent-500/10 px-2.5 py-1 text-xs font-medium text-accent-700 dark:bg-accent-400/15 dark:text-accent-300">
+                <span className="label-mono rounded-full border border-black/[0.08] px-2.5 py-1 text-accent-700 dark:border-white/15 dark:text-accent-300">
                   {tag}
                 </span>
               </li>
@@ -69,7 +85,10 @@ export default async function ProjectDetailPage({
           </ul>
         </div>
 
-        <div className="prose prose-gray dark:prose-invert">
+        <div
+          className="hero-reveal prose prose-gray mt-8 dark:prose-invert"
+          style={{ '--reveal-delay': '0.4s' } as CSSProperties}
+        >
           <MDXRemote source={project.content} />
         </div>
       </article>

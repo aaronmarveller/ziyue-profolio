@@ -7,28 +7,58 @@
 /* These tokens are the shared public contract. Every public page      */
 /* (home, research, publications, contact) consumes them.              */
 /*                                                                     */
-/* --font-sans   : platform system sans-serif stack (no web font).     */
-/* --color-accent-* : the single restrained blue accent family.        */
-/* Neutrals: built-in Tailwind `gray` family + `dark:` variants.       */
+/* Type  — three faces, loaded by app/layout.tsx via next/font:        */
+/*   --font-body    : Instrument Sans (UI + body).                     */
+/*   --font-display : Fraunces (serif display — titles, names).        */
+/*   --font-mono    : IBM Plex Mono (labels, timestamps, indices —     */
+/*                    the site reads like annotated field notes).      */
+/*   --font-sans    : aliases --font-body for Tailwind's font-sans.    */
+/*                                                                     */
+/* Color — a two-voice system grounded in the research subject         */
+/* (how people talk to machines):                                      */
+/*   --color-accent-* : cool "machine" steel blue family.              */
+/*   --color-voice-*  : warm "human voice" family, used sparingly      */
+/*                      for human turns in transcripts.                */
+/*   --color-paper/-ink/-canvas/-ink-soft : the document canvas.       */
+/*                                                                     */
 /* `@theme static` emits every token into `:root` even before any      */
 /* utility uses it, so other pages may safely rely on these tokens.    */
 /* ------------------------------------------------------------------ */
 @theme static {
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-body), system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  /* Calm, desaturated steel blue — not a marketing blue, not indigo. */
-  --color-accent-50: #f4f7fb;
-  --color-accent-100: #e8eef7;
-  --color-accent-200: #d3dfee;
-  --color-accent-300: #b0c6de;
-  --color-accent-400: #83a4c8;
-  --color-accent-500: #6288af;
-  --color-accent-600: #4a6f96;
-  --color-accent-700: #3b5a7c;
-  --color-accent-800: #304a66;
-  --color-accent-900: #273c52;
-  --color-accent-950: #1a2a3b;
+  /* ---- Document canvas ---------------------------------------- */
+  --color-paper: #f7f8fb; /* light canvas */
+  --color-ink: #171f2a; /* light text */
+  --color-canvas: #0d1219; /* dark canvas */
+  --color-ink-soft: #e8edf3; /* dark text */
+
+  /* ---- Cool "machine" voice (accent) -------------------------- */
+  --color-accent-50: #f2f6fa;
+  --color-accent-100: #e5edf5;
+  --color-accent-200: #c9daeb;
+  --color-accent-300: #9dbfdb;
+  --color-accent-400: #6c9cc6;
+  --color-accent-500: #4b80ad;
+  --color-accent-600: #3a628a;
+  --color-accent-700: #2f4e70;
+  --color-accent-800: #28405c;
+  --color-accent-900: #1e3147;
+  --color-accent-950: #15202e;
+
+  /* ---- Warm "human voice" family ------------------------------ */
+  --color-voice-50: #fbf3ec;
+  --color-voice-100: #f6e4d6;
+  --color-voice-200: #ecc7a9;
+  --color-voice-300: #e0a377;
+  --color-voice-400: #d17f4e;
+  --color-voice-500: #c26331;
+  --color-voice-600: #a64d23;
+  --color-voice-700: #853d1c;
+  --color-voice-800: #6b3219;
+  --color-voice-900: #582b17;
+  --color-voice-950: #331407;
 }
 
 /* ------------------------------------------------------------------ */
@@ -49,8 +79,8 @@
   }
 
   body {
-    background-color: #ffffff;
-    color: #1f2937; /* gray-800 */
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -62,6 +92,11 @@
       background-color: #0b0f14;
       color: #e5e7eb; /* gray-200 */
     }
+  }
+
+  /* Prose (MDX bodies) inherits the body face. */
+  .prose {
+    font-family: var(--font-body), system-ui, sans-serif;
   }
 }
 
@@ -77,36 +112,60 @@
     padding-inline: 1.5rem;
   }
 
+  /* ---- Type faces -----------------------------------------------
+     Plain aliases for the three font roles, plus the mono label
+     treatment (uppercase is visual only — DOM text is untouched).  */
+  .font-display {
+    font-family: var(--font-display), "Georgia", "Times New Roman", serif;
+    font-optical-sizing: auto;
+  }
+
+  .font-mono-ui {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo,
+      Consolas, "Liberation Mono", monospace;
+  }
+
+  .label-mono {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo,
+      Consolas, "Liberation Mono", monospace;
+    font-size: 0.6875rem; /* 11px */
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
   /* ---- Public typography scale ---------------------------------
-     Size-specific tracking (negative on large display text) and
-     leading (tight on headings, comfortable on body). Fluid via
-     clamp() so layout scales with the user's text-size setting.  */
+     Fluid via clamp() so layout scales with the user's text-size
+     setting. Serif display faces carry looser tracking than sans. */
   .display-1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    font-weight: 700;
-    font-optical-sizing: auto;
-  }
-
-  .heading-1 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    font-weight: 700;
-    font-optical-sizing: auto;
-  }
-
-  .heading-2 {
-    font-size: clamp(1.375rem, 2.4vw, 1.875rem);
-    line-height: 1.2;
-    letter-spacing: -0.015em;
+    font-family: var(--font-display), "Georgia", "Times New Roman", serif;
+    font-size: clamp(2.5rem, 6vw, 4.25rem);
+    line-height: 1.04;
+    letter-spacing: -0.012em;
     font-weight: 600;
     font-optical-sizing: auto;
   }
 
+  .heading-1 {
+    font-family: var(--font-display), "Georgia", "Times New Roman", serif;
+    font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    font-optical-sizing: auto;
+  }
+
+  .heading-2 {
+    font-family: var(--font-display), "Georgia", "Times New Roman", serif;
+    font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    font-weight: 560;
+    font-optical-sizing: auto;
+  }
+
   .body-lead {
-    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+    font-size: clamp(1.0625rem, 1.4vw, 1.2rem);
     line-height: 1.6;
     letter-spacing: 0;
   }
@@ -115,16 +174,204 @@
      The ONLY translucent surfaces in the public system: the floating
      header and the small-screen menu. Content scrolls underneath.   */
   .glass-surface {
-    background-color: rgb(255 255 255 / 0.72);
+    background-color: rgb(255 255 255 / 0.78);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     backdrop-filter: blur(20px) saturate(180%);
   }
 
   @media (prefers-color-scheme: dark) {
     .glass-surface {
-      background-color: rgb(10 15 20 / 0.66);
+      background-color: rgb(10 15 20 / 0.72);
     }
   }
+
+  /* ---- Animated underline for nav links -------------------------- */
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.3rem;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav-link:hover::after,
+  .nav-link[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* MOTION                                                              */
+/*                                                                     */
+/* One orchestrated direction — "the page speaks": a hero load         */
+/* sequence, the signature self-typing transcript, scroll-triggered    */
+/* reveals, and one ambient drifting orb. Every animation is a         */
+/* CSS-only enhancement; content is readable without any of them, and  */
+/* the prefers-reduced-motion override below neutralizes them all.     */
+/* ------------------------------------------------------------------ */
+
+/* ---- Hero load sequence (staggered fade-up) ---------------------
+   Elements carry `--reveal-delay` inline. Fill-forwards so each
+   element lands in its final visible state. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-reveal {
+  opacity: 0;
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+/* ---- Scroll-triggered reveal -------------------------------------
+   Reveal (client component) toggles `.reveal` on/off; the transition
+   plays only when JS runs and the observer fires. Elements are
+   visible by default in HTML so no-JS/reduced-motion readers always
+   see the content. */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Signature: self-typing transcript ---------------------------
+   Each turn clips in from the right using `steps()` for a typewriter
+   feel. `--type-chars` / `--type-dur` / `--type-delay` are set inline
+   per turn. The caret is visible during its turn's typing window. */
+@keyframes type-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.turn-line {
+  /* `both` keeps the clipped `from` frame applied during the delay, so a
+     turn stays hidden until its typing window opens. */
+  animation: type-in var(--type-dur, 1.8s) steps(var(--type-chars, 24), end)
+    both;
+  animation-delay: var(--type-delay, 0s);
+  will-change: clip-path;
+}
+
+@keyframes caret-in {
+  0%,
+  96% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.turn-caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 1.05em;
+  margin-left: 0.18em;
+  vertical-align: -0.18em;
+  background-color: currentColor;
+  opacity: 0;
+  /* `both` — visible from the start of its turn's typing window, then gone. */
+  animation: caret-in var(--type-dur, 1.8s) steps(var(--type-chars, 24), end)
+    both;
+  animation-delay: var(--type-delay, 0s);
+}
+
+/* ---- Waveform (assistant "listening" end state) ------------------ */
+@keyframes wave-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.wave-bar {
+  transform-origin: center;
+  animation: wave-bar 1.1s ease-in-out infinite;
+}
+
+/* The waveform bars fade in after the transcript finishes typing. */
+.waveform {
+  opacity: 0;
+  animation: wave-fade-in 0.6s ease-out forwards;
+  animation-delay: var(--wave-delay, 5.4s);
+}
+
+@keyframes wave-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- Recording dot (nav + transcript header) --------------------- */
+@keyframes rec-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.rec-dot {
+  animation: rec-pulse 2.4s ease-in-out infinite;
+}
+
+/* ---- Ambient orb (hero only) -------------------------------------- */
+@keyframes orb-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(22px, -16px) scale(1.06);
+  }
+  100% {
+    transform: translate(-10px, 12px) scale(0.97);
+  }
+}
+
+.hero-orb {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(64px);
+  background:
+    radial-gradient(closest-side, rgb(74 128 173 / 0.32), transparent 70%),
+    radial-gradient(closest-side, rgb(194 99 49 / 0.18), transparent 70%);
+  animation: orb-drift 16s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 /* ------------------------------------------------------------------ */

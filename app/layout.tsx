@@ -1,6 +1,32 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from 'next'
+import { Fraunces, IBM_Plex_Mono, Instrument_Sans } from 'next/font/google'
 import './globals.css'
+
+// Three-face type system ("field notes" identity):
+// - Fraunces (variable serif) — display headings, names, titles.
+// - Instrument Sans — body copy and UI.
+// - IBM Plex Mono — labels, timestamps, indices.
+// Each is self-hosted by next/font (no requests to Google at runtime).
+const display = Fraunces({
+  subsets: ['latin'],
+  axes: ['opsz'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const body = Instrument_Sans({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+})
+
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Ziyue Guo — AI UX Researcher',
@@ -19,7 +45,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   )
